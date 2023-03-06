@@ -1,34 +1,99 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Steps
 
-## Getting Started
+1. Mock API
 
-First, run the development server:
+- services
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+2. Breakdown and install all libraries
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- setup next js
+- tailwind
+- chakra ui
+- react icons
+- heroicons
+- framer-motion
+- recoil
+- react-player
+- react-hook-form
+- firebase
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+3. Breakdown UI
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Pages & Components Structure
+- assets (icons, images video, )
+- color
+- static text
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+4. Breakdown Project
 
-## Learn More
+- Hooks / State Management (Auth, Modal)
+- constanst (static Text, etc)
+-
 
-To learn more about Next.js, take a look at the following resources:
+5. Koding
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Global state management
+  -- Auth
+  -- Modal
+- Create UI
+- API Integration
+  -- Auth (login , signup)
+  -- protected route
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+# Project Setup
 
-## Deploy on Vercel
+- Setup next js typescript
+- constants > staticText
+- services config (Api key, base url,request)
+- .env.local
+- tailwind
+- recoil
+- chakra ui
+- firebase
+- Auth Hooks
+- react-player
+- assets
+- react hook form
+- react icons
+- heroicons
+- framer-motion
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### icons used
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### heroicons
+
+- InformationCircleIcon
+- SearchIcon
+- BellIcon
+- CheckIcon
+
+- PlusIcon
+- ThumbUpIcon
+- VolumeOffIcon
+- VolumeUpIcon
+- XIcon
+
+- ChevronLeftIcon
+- ChevronRightIcon
+
+### react icons
+
+- FaPlay
+
+### Color:
+
+- headerLink #e5e5e5 hover:#b3b3b3
+- bg body,header #141414
+- bg input $333 , focus #454545
+- placeholder gray
+- modal button #2a2a2a/60 #181818
+- modal bg 181818
+- btn login #e50914
+- checkicons #E50914
+- #333 divider signup
+
+### Tailwind
+
+- tailwindcss-textshadow
+- tailwind-scrollbar-hide
+- tailwind-scrollbar

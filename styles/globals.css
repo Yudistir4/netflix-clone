@@ -1,26 +1,30 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+@layer base {
   body {
-    color: white;
-    background: black;
+    @apply !bg-[#141414] !text-white scrollbar-thin scrollbar-track-transparent scrollbar-thumb-red-500;
+  }
+}
+
+@layer components {
+  .input {
+    @apply focus:bg-[#454545] px-5 py-3 outline-none rounded bg-input-netflix w-full;
+  }
+  .btn-login {
+    @apply bg-red-netflix p-4 text-center rounded font-bold;
+  }
+}
+
+@layer utilities {
+  .bg-red-netflix {
+    @apply bg-[#e50914];
+  }
+  .text-red-netflix {
+    @apply text-[#e50914];
+  }
+  .bg-input-netflix {
+    @apply bg-[#333];
   }
 }
