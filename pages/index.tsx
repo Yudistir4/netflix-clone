@@ -80,7 +80,7 @@ const Home = ({ netflixOriginals, trendingNow, topRated, actionMovies, romanceMo
               <p className="text-xl text-center">Ready to watch? Enter your email to create or restart your membership.
               </p>
               <form onSubmit={signup} className='flex flex-col gap-3 w-full items-center lg:flex-row lg:gap-0 max-w-[800px]'>
-                <input onChange={(e) => setEmail(e.target.value)} type="text" placeholder='Email Address' className="w-full bg-white px-4 py-3 rounded outline-none placeholder-[gray] text-black lg:flex-1 lg:rounded-r-none" />
+                <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder='Email Address' className="w-full bg-white px-4 py-3 rounded outline-none placeholder-[gray] text-black lg:flex-1 lg:rounded-r-none" />
                 <button className="bg-[#e50914] rounded py-3 lg:h-full px-6 font-bold lg:rounded-l-none flex items-center ">Get Started <ChevronRightIcon className='h-5' /></button>
               </form>
             </div>
