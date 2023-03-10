@@ -4,16 +4,21 @@ import Link from 'next/link';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import useAuth from '../hooks/useAuth';
-
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 interface FormData {
     email: string;
     password: string;
 }
-
+const loginSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+});
 const Login = () => {
 
-    const { signIn, error } = useAuth()
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const { signIn, error, loading } = useAuth()
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({ defaultValues: { email: "", password: "" }, resolver: yupResolver(loginSchema), });
     const onSubmit = handleSubmit(async (data) => {
         console.log(data)
         await signIn(data.email, data.password)
@@ -32,11 +37,17 @@ const Login = () => {
                 <form onSubmit={onSubmit} className='w-full bg-transparent sm:w-[450px] flex flex-col gap-8 p-5 sm:p-14 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] sm:bg-black/70 '>
                     <h2 className='text-4xl font-bold'>Sign In</h2>
                     <div className="flex flex-col gap-4">
-                        <input {...register("email")} type="text" className="input" placeholder='Email' />
-                        <input {...register("password")} type="password" className="input" placeholder='Password' />
+                        <div className="">
+                            <input {...register("email")} type="text" className="input" placeholder='Email' />
+                            {errors.email && <p className='text-sm text-red-500'>{errors.email.message}</p>}
+                        </div>
+                        <div className="">
+                            <input {...register("password")} type="password" className="input" placeholder='Password' />
+                            {errors.password && <p className='text-sm text-red-500'>{errors.password.message}</p>}
+                        </div>
                     </div>
-                    {error && <p className='text-xs text-red-500'>{error}</p>}
-                    <button className="btn-login">Sign In</button>
+                    {error && <p className='text-sm text-center bg-red-500/20 rounded p-3 text-red-500'>{error}</p>}
+                    <button className="btn-login flex items-center justify-center">{loading ? <AiOutlineLoading3Quarters className='animate-spin text-2xl' /> : "Sign In"}</button>
                     <p><span className='text-[gray]'> New to Netflix?</span> <Link href={"/"}> Sign up now</Link> </p>
                 </form>
             </main>

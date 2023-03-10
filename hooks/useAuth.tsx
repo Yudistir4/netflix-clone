@@ -1,74 +1,118 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, User } from "firebase/auth"
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  User,
+} from 'firebase/auth';
 import { auth } from '../firebase';
 import { useRouter } from 'next/router';
+import { FirebaseErrorCode } from '../constants/firebaseErrorCode';
 
 interface IAuth {
-    user: User | null;
-    signUp: (email: string, password: string) => Promise<void>
-    signIn: (email: string, password: string) => Promise<void>
-    logout: () => Promise<void>
-    error: string | null
-    loading: boolean
+  user: User | null;
+  signUp: (email: string, password: string) => Promise<boolean>;
+  signIn: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  error: string | null;
+  loading: boolean;
 }
 
 const AuthContext = createContext<IAuth>({
-    user: null,
-    signUp: async () => { },
-    signIn: async () => { },
-    logout: async () => { },
-    error: null,
-    loading: false
-})
-
+  user: null,
+  signUp: async () => false,
+  signIn: async () => {},
+  logout: async () => {},
+  error: null,
+  loading: false,
+});
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState<boolean>(false)
-    const [initLoading, setInitLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | null>(null)
-    const router = useRouter()
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [initLoading, setInitLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log('calling');
+      if (user) {
+        setUser(user);
+        // router.push("/")
+      } else {
+        setUser(null);
+        router.push('/');
+      }
+      setInitLoading(false);
+    });
+  }, [auth]);
 
-    useEffect(() => {
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                setUser(user)
-                router.push("/")
-            } else {
-                setUser(null)
-                // router.push("/")
-            }
-            setInitLoading(false)
-
-        })
-    }, [auth])
-
-    const signUp = async (email: string, password: string) => {
-        setLoading(true)
-        await createUserWithEmailAndPassword(auth, email, password).then(userCredentials => { setUser(userCredentials.user); router.push("/login") }).catch(err => setError(err.message))
-        setLoading(false)
+  const signUp = async (email: string, password: string) => {
+    setLoading(true);
+    let errStatus = false;
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setUser(userCredentials.user);
+      setError(null);
+    } catch (err: any) {
+      setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
+      errStatus = true;
     }
-    const signIn = async (email: string, password: string) => {
-        setLoading(true)
-        await signInWithEmailAndPassword(auth, email, password).then(userCredentials => { setUser(userCredentials.user); router.push("/") }).catch(err => setError(err.message))
-        setLoading(false)
+    setLoading(false);
+    return errStatus;
+  };
+  const signIn = async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      setUser(userCredentials.user);
+      setError(null);
+      router.push('/');
+    } catch (err: any) {
+      setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
     }
-    const logout = async () => {
-        setLoading(true)
-        await signOut(auth).then(() => { setUser(null); router.push("/login") }).catch(err => setError(err.message))
-        setLoading(false)
-    }
+    setLoading(false);
+  };
+  const logout = async () => {
+    setLoading(true);
+    await signOut(auth)
+      .then(() => {
+        setUser(null);
+        router.push('/login');
+      })
+      .catch((err) => setError(err.message));
+    setLoading(false);
+  };
 
+  const memoedValues = useMemo(
+    () => ({ user, loading, error, signUp, signIn, logout }),
+    [user, loading, error]
+  );
 
-    const memoedValues = useMemo(() => ({ user, loading, error, signUp, signIn, logout }), [user, loading, error])
+  return (
+    <AuthContext.Provider value={memoedValues}>
+      {!initLoading && children}{' '}
+    </AuthContext.Provider>
+  );
+};
 
-    return <AuthContext.Provider value={memoedValues}>{!initLoading && children} </AuthContext.Provider>
-}
+const useAuth = () => useContext(AuthContext);
 
-const useAuth = () => useContext(AuthContext)
-
-
-
-export default useAuth
+export default useAuth;
