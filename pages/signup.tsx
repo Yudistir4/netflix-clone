@@ -9,9 +9,10 @@ import Section2 from '../components/signup/Section2';
 import Section3 from '../components/signup/Section3';
 import Section4 from '../components/signup/Section4';
 import Section5 from '../components/signup/Section5';
-import useAuth from '../hooks/useAuth';
+import useAuth, { useRequireNoAuth } from '../hooks/useAuth';
 
 const Signup = () => {
+  useRequireNoAuth();
   const { user, logout } = useAuth();
   const [section, setSection] = useState(1);
   const [data, setData] = useState<{ email: string; password: string }>({

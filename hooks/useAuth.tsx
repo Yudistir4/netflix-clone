@@ -47,10 +47,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('calling');
       if (user) {
         setUser(user);
+        console.log(user);
         // router.push("/")
       } else {
         setUser(null);
-        router.push('/');
+        // router.push('/');
       }
       setInitLoading(false);
     });
@@ -108,7 +109,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={memoedValues}>
-      {!initLoading && children}{' '}
+      {!initLoading && children} {/* {children}{' '} */}
     </AuthContext.Provider>
   );
 };
@@ -116,3 +117,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 const useAuth = () => useContext(AuthContext);
 
 export default useAuth;
+
+export const useRequireAuth = () => {
+  const router = useRouter();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (!auth.user) {
+      router.push('/login');
+    }
+  }, [auth, router]);
+
+  return auth;
+};
+
+export const useRequireNoAuth = () => {
+  const router = useRouter();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.user) {
+      router.push('/');
+    }
+  }, [auth, router]);
+
+  return auth;
+};
