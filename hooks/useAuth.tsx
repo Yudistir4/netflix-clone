@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       setUser(userCredentials.user);
       setError(null);
-      router.push('/');
+      router.push('/browse');
     } catch (err: any) {
       setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
     }
@@ -137,7 +137,7 @@ export const useRequireNoAuth = () => {
 
   useEffect(() => {
     if (auth.user) {
-      router.push('/');
+      router.push('/browse');
     }
   }, [auth, router]);
 

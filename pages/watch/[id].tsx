@@ -95,11 +95,12 @@ const Watch = () => {
           }}
         />
 
-        <Link href="/" className=" ">
-          <a className="group-hover:opacity-100 opacity-0 transition-all group-hover:scale-100 scale-0 rounded-full   absolute md:top-8 md:left-8 top-5 left-5 h-10 w-10 flex items-center justify-center ">
-            <BsArrowLeft className="h-20 w-20" />
-          </a>
-        </Link>
+        <button
+          onClick={() => router.back()}
+          className="group-hover:opacity-100 opacity-0 transition-all group-hover:scale-100 scale-0 rounded-full   absolute md:top-8 md:left-8 top-5 left-5 h-10 w-10 flex items-center justify-center "
+        >
+          <BsArrowLeft className="h-20 w-20" />
+        </button>
       </div>
       {/* </div> */}
       <div className=" absolute flex   bottom-0 left-0 p-5 md:p-8 justify-between w-full">

@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { BellIcon } from '@heroicons/react/24/solid';
+import { BellIcon, XMarkIcon } from '@heroicons/react/24/solid';
 
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 import {
@@ -17,10 +17,28 @@ import {
 } from '@chakra-ui/react';
 import useAuth from '../hooks/useAuth';
 import Link from 'next/link';
+import useClickOutside from '../hooks/useClickOutside';
+import requests from '../services/config';
+import { useRecoilState } from 'recoil';
+import { searchMoviesState, searchState } from '../atoms/modalAtom';
+import { useRouter } from 'next/router';
+
+const routes = [
+  { name: 'Home', href: '/browse' },
+  { name: 'Tv Shows', href: '/tvshows' },
+  { name: 'Movies', href: '/movies' },
+  { name: 'News & Popular', href: '/newsandpopular' },
+  { name: 'My List', href: '/mylist' },
+];
 
 const Navbar = () => {
+  const router = useRouter();
   const { logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [search, setSearch] = useRecoilState(searchState);
+  const [searchResult, setSearchResult] = useRecoilState(searchMoviesState);
+  const [showInputSearch, setShowInputSearch] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -32,8 +50,34 @@ const Navbar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
-
+  useClickOutside(ref, () => {
+    if (search) return;
+    setShowInputSearch(false);
+  });
   console.log(isScrolled);
+
+  const handleSearch = async () => {
+    if (!search) {
+      if (router.pathname === '/search') router.back();
+      return;
+    }
+    if (router.pathname !== '/search') router.push('/search');
+    fetch(requests.search + search).then(async (res) => {
+      const data = await res.json();
+      setSearchResult(data.results);
+    });
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      handleSearch();
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [search]);
+
   return (
     <div
       className={`${
@@ -55,27 +99,59 @@ const Navbar = () => {
           </a>
         </Link>
         <ul className=" items-center gap-3 ml-8 text-[#e5e5e5] hidden md:flex">
-          <li className="hover:text-[#b3b3b3] transition cursor-pointer">
-            Home
-          </li>
-          <li className="hover:text-[#b3b3b3] transition cursor-pointer">
-            Tv Shows
-          </li>
-          <li className="hover:text-[#b3b3b3] transition cursor-pointer">
-            Movies
-          </li>
-          <li className="hover:text-[#b3b3b3] transition cursor-pointer">
-            News & Popular
-          </li>
-          <li className="hover:text-[#b3b3b3] transition cursor-pointer">
-            My List
-          </li>
+          {routes.map((data) => (
+            <li
+              key={data.href}
+              onClick={() => {
+                setSearch('');
+                setShowInputSearch(false);
+              }}
+              className="hover:text-[#b3b3b3] transition cursor-pointer"
+            >
+              <Link href={data.href}>
+                <a>{data.name}</a>
+              </Link>
+            </li>
+          ))}
         </ul>
       </div>
 
-      <div className="flex items-center gap-3">
-        <FaSearch />
-        <BellIcon className="h-6 w-6 " />
+      <div className="flex items-center gap-5">
+        {/* INPUT SEARCH */}
+        <div
+          className={`${
+            showInputSearch && 'w-[300px]'
+          } relative flex items-center w-10 h-12  transition-all`}
+          ref={ref}
+        >
+          {/* {showInputSearch && ( */}
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Judul, orang, genre"
+            className={`${
+              showInputSearch ? 'block opacity-100 px-10' : 'absolute opacity-0'
+            } w-full bg-transparent border-2 h-full outline-none   bg-[#141414] `}
+          />
+          {/* )} */}
+
+          <FaSearch
+            onClick={() => setShowInputSearch(true)}
+            className={`${
+              showInputSearch
+                ? 'absolute left-2 top-1/2 -translate-y-1/2'
+                : 'left-1/2 translate-x-1/2'
+            } cursor-pointer`}
+          />
+          {search && (
+            <XMarkIcon
+              onClick={() => setSearch('')}
+              className={`absolute right-1 top-1/2 -translate-y-1/2 cursor-pointer h-7 bg-[#141414]`}
+            />
+          )}
+        </div>
+        <BellIcon className="h-7 w-7 " />
         <Menu>
           <MenuButton>
             <img src="/assets/person.png" className="rounded" alt="" />

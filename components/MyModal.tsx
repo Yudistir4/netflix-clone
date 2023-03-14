@@ -20,8 +20,8 @@ import { useEffect, useState } from 'react';
 import { FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState } from '../atoms/modalAtom';
-import { Element, Genre } from '../typing';
+import { modalState, movieState, myMoviesState } from '../atoms/modalAtom';
+import { Element, Genre, myMovieFirebase } from '../typing';
 import {
   addDoc,
   collection,
@@ -33,7 +33,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '../firebase';
 import useAuth from '../hooks/useAuth';
-import { BsCheck2, BsCheckLg } from 'react-icons/bs';
+import { BsCheck2 } from 'react-icons/bs';
 
 const MyModal = () => {
   const { user } = useAuth();
@@ -41,6 +41,7 @@ const MyModal = () => {
   const [modal, setModal] = useRecoilState(modalState);
   const [muted, setMuted] = useState(true);
   const [movie] = useRecoilState(movieState);
+  const [myMovies, setMyMovies] = useRecoilState(myMoviesState);
   const [trailer, setTrailer] = useState('');
   const [genres, setGenres] = useState<Genre[]>([]);
   const [isSaved, setIsSaved] = useState(false);
@@ -54,21 +55,29 @@ const MyModal = () => {
       .then(() => {
         console.log('Document successfully deleted!');
         setIsSaved(false);
+        setMovieIdFirebase('');
       })
       .catch((error) => {
         console.error('Error removing document: ', error);
       });
+
+    setMyMovies(
+      myMovies?.filter((data: myMovieFirebase) => data.movie?.id !== movie?.id)
+    );
   };
 
   const addMovie = async () => {
     // Add a second document with a generated ID.
 
     try {
-      const docRef = await addDoc(collection(db, 'movies'), {
+      const newMovie: myMovieFirebase = {
         userID: user!.uid,
         movie,
-      });
+      };
+      const docRef = await addDoc(collection(db, 'movies'), newMovie);
+      setMovieIdFirebase(docRef.id);
       setIsSaved(true);
+      setMyMovies((prev) => [...prev, newMovie]);
       console.log('Document written with ID: ', docRef.id);
     } catch (e) {
       console.error('Error adding document: ', e);

@@ -1,3 +1,5 @@
+import { DocumentData } from 'firebase/firestore';
+
 export interface Genre {
   id: number;
   name: string;
@@ -22,12 +24,17 @@ export interface Movie {
   vote_count: number;
 }
 
+export interface myMovieFirebase {
+  userID: string;
+  movie: Movie | DocumentData | null;
+}
+
 export interface Element {
   type:
-    | "Bloopers"
-    | "Featurette"
-    | "Behind the Scenes"
-    | "Clip"
-    | "Trailer"
-    | "Teaser";
+    | 'Bloopers'
+    | 'Featurette'
+    | 'Behind the Scenes'
+    | 'Clip'
+    | 'Trailer'
+    | 'Teaser';
 }
