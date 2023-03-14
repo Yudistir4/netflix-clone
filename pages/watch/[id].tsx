@@ -68,7 +68,7 @@ const Watch = () => {
     };
 
     fetchMovie();
-  }, [id]);
+  }, [id, movie]);
 
   return (
     <div className="group bg-[#181818] h-screen  text-white !p-0 !rounded overflow-hidden">

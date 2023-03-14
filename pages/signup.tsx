@@ -40,6 +40,7 @@ const Signup = () => {
               width="100"
               src="/assets/netflix-logo.svg"
               className="cursor-pointer"
+              alt="netflix-logo"
             />
           </a>
         </Link>

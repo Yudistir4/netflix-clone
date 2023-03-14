@@ -87,7 +87,7 @@ const Navbar = () => {
       }  transition duration-300 flex items-center justify-between px-5 py-3 sticky top-0 z-50 sm:text-xl sm:px-10 `}
     >
       <div className="flex items-center">
-        <Link href="/">
+        <Link href="/browse">
           <a>
             <Image
               className="cursor-pointer object-contain"

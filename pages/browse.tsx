@@ -9,7 +9,6 @@ import { Movie } from '../typing';
 import { useRequireAuth } from '../hooks/useAuth';
 import { ReactElement } from 'react';
 import { useRouter } from 'next/router';
-import SearchResult from '../components/SearchResult';
 import { useRecoilState } from 'recoil';
 import { searchState } from '../atoms/modalAtom';
 import Layout from '../components/Layout';

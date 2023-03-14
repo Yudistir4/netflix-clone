@@ -40,12 +40,14 @@ const Login = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="bg-black h-screen w-screen sm:bg-transparent">
-        <img
-          src="/assets/netflix-logo.svg"
-          alt=""
-          width={170}
-          className="z-40 absolute left-6 top-6"
-        />
+        <div className="z-40 absolute left-6 top-6">
+          <Image
+            src="/assets/netflix-logo.svg"
+            alt=""
+            width={170}
+            height={50}
+          />
+        </div>
         <Image
           src="/assets/bg-login.jpg"
           alt=""

@@ -29,7 +29,7 @@ const Mylist: NextPageWithLayout = () => {
       setMyMovies(movies);
     };
     getData();
-  }, [user]);
+  }, [user, setMyMovies]);
 
   return (
     <div>
