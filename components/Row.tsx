@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import React, { useRef } from 'react';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState } from '../atoms/modalAtom';
+import { modalState, movieState } from '../atoms/atom';
 import { Movie } from '../typing';
 
 interface Props {

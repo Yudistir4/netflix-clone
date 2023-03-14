@@ -1,7 +1,12 @@
 import Image from 'next/image';
 import React, { ReactElement } from 'react';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState, searchMoviesState } from '../atoms/modalAtom';
+import {
+  modalState,
+  movieState,
+  searchMoviesState,
+  searchState,
+} from '../atoms/atom';
 import Layout from '../components/Layout';
 import { useRequireAuth } from '../hooks/useAuth';
 import { Movie } from '../typing';
@@ -11,6 +16,7 @@ const Search: NextPageWithLayout = () => {
   useRequireAuth();
   const [modal, setModal] = useRecoilState(modalState);
   const [movie, setMovie] = useRecoilState(movieState);
+  const [search] = useRecoilState(searchState);
   const [searchMovies] = useRecoilState(searchMoviesState);
   return (
     <div className=" p-3 sm:p-10">
@@ -42,6 +48,11 @@ const Search: NextPageWithLayout = () => {
             </div>
           ))}
       </div>
+      {searchMovies?.length === 0 && (
+        <div className="w-full h-[70vh] flex items-center justify-center text-xl">
+          Tidak ada hasil untuk pencarian &quot;{search}&quot;
+        </div>
+      )}
     </div>
   );
 };

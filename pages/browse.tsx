@@ -10,7 +10,7 @@ import { useRequireAuth } from '../hooks/useAuth';
 import { ReactElement } from 'react';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
-import { searchState } from '../atoms/modalAtom';
+import { searchState } from '../atoms/atom';
 import Layout from '../components/Layout';
 interface Props {
   netflixOriginals: Movie[];

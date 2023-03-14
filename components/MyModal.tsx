@@ -20,7 +20,7 @@ import { useEffect, useState } from 'react';
 import { FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState, myMoviesState } from '../atoms/modalAtom';
+import { modalState, movieState, myMoviesState } from '../atoms/atom';
 import { Element, Genre, myMovieFirebase } from '../typing';
 import {
   addDoc,

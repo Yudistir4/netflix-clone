@@ -21,7 +21,7 @@ import { BsArrowLeft } from 'react-icons/bs';
 import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState } from '../../atoms/modalAtom';
+import { modalState, movieState } from '../../atoms/atom';
 import { useRequireAuth } from '../../hooks/useAuth';
 import { Element, Genre } from '../../typing';
 

@@ -20,7 +20,7 @@ import Link from 'next/link';
 import useClickOutside from '../hooks/useClickOutside';
 import requests from '../services/config';
 import { useRecoilState } from 'recoil';
-import { searchMoviesState, searchState } from '../atoms/modalAtom';
+import { searchMoviesState, searchState } from '../atoms/atom';
 import { useRouter } from 'next/router';
 
 const routes = [

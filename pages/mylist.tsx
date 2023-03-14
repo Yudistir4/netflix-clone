@@ -2,7 +2,7 @@ import { collection, getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import React, { ReactElement, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState, myMoviesState } from '../atoms/modalAtom';
+import { modalState, movieState, myMoviesState } from '../atoms/atom';
 import Layout from '../components/Layout';
 import { db } from '../firebase';
 import useAuth, { useRequireAuth } from '../hooks/useAuth';

@@ -4,7 +4,7 @@ import { FaPlay } from 'react-icons/fa';
 import { InformationCircleIcon } from '@heroicons/react/24/solid';
 import { useRecoilState } from 'recoil';
 // import { modalState } from "../../atoms/modalAtom"
-import { modalState, movieState } from '../atoms/modalAtom';
+import { modalState, movieState } from '../atoms/atom';
 import { Movie } from '../typing';
 import { baseUrl } from '../constants';
 import Link from 'next/link';
