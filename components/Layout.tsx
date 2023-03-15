@@ -1,4 +1,5 @@
 import React from 'react';
+import Footer from './Footer';
 import MyModal from './MyModal';
 import Navbar from './Navbar';
 
@@ -7,6 +8,7 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
     <>
       <Navbar />
       {children}
+      <Footer />
       <MyModal />
     </>
   );
