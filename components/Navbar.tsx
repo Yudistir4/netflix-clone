@@ -54,7 +54,6 @@ const Navbar = () => {
     if (search) return;
     setShowInputSearch(false);
   });
-  console.log(isScrolled);
 
   const handleSearch = async () => {
     if (!search) {
