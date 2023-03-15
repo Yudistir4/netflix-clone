@@ -71,7 +71,7 @@ const Navbar = () => {
   useEffect(() => {
     const timeout = setTimeout(() => {
       handleSearch();
-    }, 500);
+    }, 200);
 
     return () => {
       clearTimeout(timeout);

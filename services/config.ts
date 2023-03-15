@@ -11,6 +11,9 @@ const requests = {
   fetchRomanceMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=10749`,
   fetchDocumentaries: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=99`,
   search: `${BASE_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=`,
+  fetchTvShowKorea: `${BASE_URL}/discover/tv?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_original_language=ko&page=1`,
+  fetchTvShowBarat: `${BASE_URL}/discover/tv?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&with_original_language=en&page=1
+  `,
 };
 
 export default requests;
