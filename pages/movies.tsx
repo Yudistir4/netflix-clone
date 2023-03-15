@@ -13,30 +13,33 @@ import { useRecoilState } from 'recoil';
 import { searchState } from '../atoms/atom';
 import Layout from '../components/Layout';
 interface Props {
-  koreans: Movie[];
-  barats: Movie[];
-  japans: Movie[];
-  indians: Movie[];
-  comedys: Movie[];
+  actions: Movie[];
+  adventures: Movie[];
+  animations: Movie[];
+  dramas: Movie[];
+  historys: Movie[];
+  wars: Movie[];
 }
 
 const Home: NextPageWithLayout<Props> = ({
-  koreans,
-  barats,
-  japans,
-  indians,
-  comedys,
+  actions,
+  adventures,
+  animations,
+  dramas,
+  historys,
+  wars,
 }) => {
   useRequireAuth();
   const router = useRouter();
   const [search] = useRecoilState(searchState);
 
   const movies = [
-    { title: 'Tv Shows Korean', movies: koreans },
-    { title: 'Tv Shows Barat', movies: barats },
-    { title: 'Tv Shows Japan', movies: japans },
-    { title: 'Tv Shows India', movies: indians },
-    { title: 'Tv Shows Comedy', movies: comedys },
+    { title: 'Action Movie', movies: actions },
+    { title: 'Adventure Movie', movies: adventures },
+    { title: 'Animation Movie', movies: animations },
+    { title: 'Drama Movie', movies: dramas },
+    { title: 'History Movie', movies: historys },
+    { title: 'War Movie', movies: wars },
   ];
 
   // if (!user) {
@@ -52,7 +55,7 @@ const Home: NextPageWithLayout<Props> = ({
       </Head>
 
       <main className="">
-        <Banner netflixOriginals={koreans} />
+        <Banner netflixOriginals={actions} />
         <section className="flex flex-col gap-5 sm:gap-8">
           {movies.map((val) => (
             <Row key={val.title} title={val.title} movies={val.movies} />
@@ -70,21 +73,24 @@ Home.getLayout = function getLayout(page: ReactElement) {
 export default Home;
 
 export const getServerSideProps = async () => {
-  const [koreans, barats, japans, indians, comedys] = await Promise.all([
-    fetch(requests.fetchTvShowKorea).then((res) => res.json()),
-    fetch(requests.fetchTvShowBarat).then((res) => res.json()),
-    fetch(requests.fetchTvShowJapan).then((res) => res.json()),
-    fetch(requests.fetchTvShowIndia).then((res) => res.json()),
-    fetch(requests.fetchTvShowComedy).then((res) => res.json()),
-  ]);
+  const [actions, adventures, animations, dramas, historys, wars] =
+    await Promise.all([
+      fetch(requests.fetchMovieAction).then((res) => res.json()),
+      fetch(requests.fetchMovieAdventure).then((res) => res.json()),
+      fetch(requests.fetchMovieAnimation).then((res) => res.json()),
+      fetch(requests.fetchMovieDrama).then((res) => res.json()),
+      fetch(requests.fetchMovieHistory).then((res) => res.json()),
+      fetch(requests.fetchMovieWar).then((res) => res.json()),
+    ]);
 
   return {
     props: {
-      koreans: koreans.results,
-      barats: barats.results,
-      japans: japans.results,
-      indians: indians.results,
-      comedys: comedys.results,
+      actions: actions.results,
+      adventures: adventures.results,
+      animations: animations.results,
+      dramas: dramas.results,
+      historys: historys.results,
+      wars: wars.results,
     },
   };
 };

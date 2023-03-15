@@ -35,6 +35,7 @@ const Banner = ({ netflixOriginals }: Props) => {
         const index = data.videos.results.findIndex(
           (element: Element) => element.type === 'Trailer'
         );
+        console.log(data.videos);
         setTrailer(data.videos?.results[index]?.key);
       }
     };
@@ -46,7 +47,7 @@ const Banner = ({ netflixOriginals }: Props) => {
       netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]
     );
   }, [netflixOriginals]);
-  console.log(netflixOriginals);
+  // console.log(netflixOriginals);
   return (
     <div className="relative overflow-x-clip p-3 sm:px-10 aspect-[2/0.8] ">
       {/* <div className="bg-gradient-to-b w-full h-[60vh] sm:h-[95vh] absolute left-0 top-0 -z-10"></div> */}
