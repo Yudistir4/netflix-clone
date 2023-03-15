@@ -20,7 +20,12 @@ import { useEffect, useState } from 'react';
 import { FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState, myMoviesState } from '../atoms/atom';
+import {
+  modalState,
+  movieState,
+  muteState,
+  myMoviesState,
+} from '../atoms/atom';
 import { Element, Genre, myMovieFirebase } from '../typing';
 import {
   addDoc,
@@ -39,7 +44,7 @@ const MyModal = () => {
   const { user } = useAuth();
   const router = useRouter();
   const [modal, setModal] = useRecoilState(modalState);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useRecoilState(muteState);
   const [movie] = useRecoilState(movieState);
   const [myMovies, setMyMovies] = useRecoilState(myMoviesState);
   const [trailer, setTrailer] = useState('');

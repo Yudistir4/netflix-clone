@@ -21,7 +21,12 @@ import { BsArrowLeft } from 'react-icons/bs';
 import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
-import { modalState, movieState } from '../../atoms/atom';
+import {
+  modalState,
+  movieState,
+  muteState,
+  volumeState,
+} from '../../atoms/atom';
 import { useRequireAuth } from '../../hooks/useAuth';
 import { Element, Genre } from '../../typing';
 
@@ -29,12 +34,12 @@ const Watch = () => {
   useRequireAuth();
   const router = useRouter();
   const { id } = router.query;
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useRecoilState(muteState);
   const [movie] = useRecoilState(movieState);
   const [trailer, setTrailer] = useState('');
   const [genres, setGenres] = useState<Genre[]>([]);
   const [playing, setPlaying] = useState(true);
-  const [volume, setVolume] = useState(0.5);
+  const [volume, setVolume] = useRecoilState(volumeState);
   const [showInputRange, setShowInputRange] = useState(false);
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
