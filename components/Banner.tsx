@@ -10,6 +10,7 @@ import { baseUrl } from '../constants';
 import Link from 'next/link';
 import ReactPlayer from 'react-player';
 import { Element } from '../typing';
+import { cropText } from '../utils';
 
 interface Props {
   netflixOriginals: Movie[];
@@ -80,7 +81,7 @@ const Banner = ({ netflixOriginals }: Props) => {
           {currMovie?.title || currMovie?.name || movie?.original_name}
         </h1>
         <p className="md:text-xl text-xs max-w-[80%] md:max-w-xl">
-          {currMovie?.overview}
+          {cropText(currMovie?.overview)}
         </p>
 
         <div className="flex gap-3">
