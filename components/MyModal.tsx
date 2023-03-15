@@ -176,6 +176,10 @@ const MyModal = () => {
                 {' '}
                 <XMarkIcon className="h-5 w-5 sm:h-8 sm:w-8" />
               </button>
+              <div className="z-10 absolute left-0 bottom-20 p-10 text-5xl">
+                {movie?.title || movie?.name || movie?.original_name}
+              </div>
+
               <div className="z-20 absolute flex   bottom-0 left-0 p-5 sm:p-10 justify-between w-full">
                 <div className="flex gap-2">
                   <div

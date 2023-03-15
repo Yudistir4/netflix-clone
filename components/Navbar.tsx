@@ -5,16 +5,7 @@ import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-import {
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-} from '@chakra-ui/react';
+import { Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react';
 import useAuth from '../hooks/useAuth';
 import Link from 'next/link';
 import useClickOutside from '../hooks/useClickOutside';
@@ -27,7 +18,6 @@ const routes = [
   { name: 'Home', href: '/browse' },
   { name: 'Tv Shows', href: '/tvshows' },
   { name: 'Movies', href: '/movies' },
-  { name: 'News & Popular', href: '/newsandpopular' },
   { name: 'My List', href: '/mylist' },
 ];
 
