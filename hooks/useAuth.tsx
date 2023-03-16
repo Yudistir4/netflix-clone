@@ -9,6 +9,8 @@ import React, {
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   User,
@@ -21,6 +23,7 @@ interface IAuth {
   user: User | null;
   signUp: (email: string, password: string) => Promise<boolean>;
   signIn: (email: string, password: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<boolean>;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -30,6 +33,7 @@ const AuthContext = createContext<IAuth>({
   user: null,
   signUp: async () => false,
   signIn: async () => {},
+  forgotPassword: async () => false,
   logout: async () => {},
   error: null,
   loading: false,
@@ -101,9 +105,24 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       .catch((err) => setError(err.message));
     setLoading(false);
   };
+  const forgotPassword = async (email: string) => {
+    let status = false;
+    setLoading(true);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setError(null);
+      status = true;
+    } catch (err: any) {
+      setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
+      status = false;
+    }
+
+    setLoading(false);
+    return status;
+  };
 
   const memoedValues = useMemo(
-    () => ({ user, loading, error, signUp, signIn, logout }),
+    () => ({ user, loading, error, signUp, signIn, logout, forgotPassword }),
     [user, loading, error]
   );
 

@@ -98,6 +98,9 @@ const Login = () => {
               'Sign In'
             )}
           </button>
+          <Link href="/forgotPassword">
+            <a className="hover:underline ">Forgot Password?</a>
+          </Link>
           <p>
             <span className="text-[gray]"> New to Netflix?</span>{' '}
             <Link href={'/'}> Sign up now</Link>{' '}

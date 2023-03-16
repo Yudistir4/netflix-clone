@@ -88,7 +88,7 @@ export const FirebaseErrorCode = {
   'auth/unsupported-tenant-operation': 'UNSUPPORTED TENANT OPERATION',
   'auth/unverified-email': 'UNVERIFIED EMAIL',
   'auth/user-cancelled': 'USER CANCELLED',
-  'auth/user-not-found': 'USER DELETED',
+  'auth/user-not-found': 'Email Not Found',
   'auth/user-disabled': 'USER DISABLED',
   'auth/user-mismatch': 'USER MISMATCH',
   'auth/user-signed-out': 'USER SIGNED OUT',

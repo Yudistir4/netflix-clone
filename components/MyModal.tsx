@@ -96,7 +96,7 @@ const MyModal = () => {
       const q = query(
         movieRef,
         where('movie.id', '==', movie!.id),
-        where('userID', '==', user!.uid)
+        where('userID', '==', user?.uid || '')
       );
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc: any) => {
