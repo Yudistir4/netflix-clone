@@ -110,7 +110,7 @@ const MyModal = () => {
         setIsSaved(false);
       }
     };
-    getData();
+  getData();
   }, [movie, user]);
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const MyModal = () => {
         size="5xl"
         scrollBehavior="outside"
       >
-        <ModalOverlay />
+      <ModalOverlay />
         <ModalContent className="m-5 sm:m-10">
           <ModalBody
             overflowY="auto"

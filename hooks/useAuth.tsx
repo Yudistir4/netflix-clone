@@ -15,15 +15,27 @@ import {
   signOut,
   User,
 } from 'firebase/auth';
-import { auth } from '../firebase';
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
+import { auth, db } from '../firebase';
 import { useRouter } from 'next/router';
 import { FirebaseErrorCode } from '../constants/firebaseErrorCode';
+import { UserDetail } from '../typing';
 
 interface IAuth {
   user: User | null;
+  userDetail: UserDetail | null;
   signUp: (email: string, password: string) => Promise<boolean>;
   signIn: (email: string, password: string) => Promise<void>;
   forgotPassword: (email: string) => Promise<boolean>;
+  updateUserDetail: (newUserDetail: UserDetail) => Promise<void>;
   logout: () => Promise<void>;
   error: string | null;
   loading: boolean;
@@ -31,16 +43,19 @@ interface IAuth {
 
 const AuthContext = createContext<IAuth>({
   user: null,
+  userDetail: null,
   signUp: async () => false,
   signIn: async () => {},
   forgotPassword: async () => false,
   logout: async () => {},
+  updateUserDetail: async () => {},
   error: null,
   loading: false,
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [userDetail, setUserDetail] = useState<UserDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [initLoading, setInitLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,10 +66,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log('calling');
       if (user) {
         setUser(user);
-        console.log(user);
+        getUserDetail(user.uid);
         // router.push("/")
       } else {
         setUser(null);
+        setUserDetail(null);
         // router.push('/');
       }
       setInitLoading(false);
@@ -72,6 +88,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       setUser(userCredentials.user);
       setError(null);
+      addUserDetail(userCredentials.user.uid);
     } catch (err: any) {
       setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
       errStatus = true;
@@ -89,7 +106,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
       setUser(userCredentials.user);
       setError(null);
-      router.push('/browse');
+      await getUserDetail(userCredentials.user.uid);
+      // router.push(userDetail?.hasPaid ? '/browse' : '/');
     } catch (err: any) {
       setError(FirebaseErrorCode[err.code as keyof typeof FirebaseErrorCode]);
     }
@@ -121,9 +139,62 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return status;
   };
 
+  const getUserDetail = async (userID: string) => {
+    const userDetailsRef = collection(db, 'userDetails');
+    const q = query(userDetailsRef, where('userID', '==', userID));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc: any) => {
+      console.log(doc.id, ' => ', doc.data());
+      console.log(doc);
+      setUserDetail({ id: doc.id, ...doc.data() });
+    });
+
+    // console.log(querySnapshot.empty);
+    // if (querySnapshot.empty) {
+    //   setIsSaved(false);
+    // }
+  };
+  const updateUserDetail = async (newUserDetail: UserDetail) => {
+    const { id, hasPaid, planType, signupSlideNumber } = newUserDetail;
+    if (!id) {
+      console.log('[Update Failed] id is required');
+      return;
+    }
+    const userDetailRef = doc(db, 'userDetails', id);
+    setUserDetail(newUserDetail);
+    await updateDoc(userDetailRef, {
+      hasPaid: hasPaid,
+      planType: planType,
+      signupSlideNumber: signupSlideNumber,
+    });
+  };
+
+  const addUserDetail = async (userID: string) => {
+    const newData: UserDetail = {
+      hasPaid: false,
+      planType: 'mobile',
+      signupSlideNumber: 3,
+      userID,
+      // id: docRef.id,
+    };
+    const docRef = await addDoc(collection(db, 'userDetails'), newData);
+    newData.id = docRef.id;
+    setUserDetail(newData);
+  };
+
   const memoedValues = useMemo(
-    () => ({ user, loading, error, signUp, signIn, logout, forgotPassword }),
-    [user, loading, error]
+    () => ({
+      user,
+      userDetail,
+      loading,
+      error,
+      signUp,
+      signIn,
+      logout,
+      forgotPassword,
+      updateUserDetail,
+    }),
+    [user, userDetail, loading, error]
   );
 
   return (
@@ -139,13 +210,18 @@ export default useAuth;
 
 export const useRequireAuth = () => {
   const router = useRouter();
-  const auth = useAuth();
+  const { user, userDetail } = useAuth();
 
   useEffect(() => {
-    if (!auth.user) {
+    if (!user) {
       router.push('/login');
+    } else if (user && userDetail) {
+      console.log('---hei yo---');
+      if (!userDetail.hasPaid) {
+        router.push('/signup/' + userDetail.signupSlideNumber);
+      }
     }
-  }, [auth, router]);
+  }, [user, userDetail, router]);
 
   return auth;
 };
@@ -155,10 +231,62 @@ export const useRequireNoAuth = () => {
   const auth = useAuth();
 
   useEffect(() => {
-    if (auth.user) {
-      router.push('/browse');
+    if (auth.user && auth.userDetail) {
+      if (auth.userDetail.hasPaid) {
+        router.push('/browse');
+      } else {
+        router.push('/');
+      }
     }
   }, [auth, router]);
 
   return auth;
 };
+export const useRequireWithOrWithoutAuth = () => {
+  const router = useRouter();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.user && auth.userDetail) {
+      if (auth.userDetail.hasPaid) {
+        router.push('/browse');
+      }
+    }
+  }, [auth, router]);
+
+  return auth;
+};
+export const useRequireWithAuthAndNoSubscribe = () => {
+  const router = useRouter();
+  const auth = useAuth();
+
+  useEffect(() => {
+    if (auth.user && auth.userDetail) {
+      if (auth.userDetail.hasPaid) {
+        router.push('/browse');
+      }
+    } else if (!auth.user) {
+      router.push('/login');
+    }
+  }, [auth, router]);
+
+  return auth;
+};
+
+// useRequireAuthAndSubscribe
+// useRequireNoAuthAndNoSubscribe => login, index,1,2,
+// useRequireAuthAndNoSubscribe => index, 2
+// useRequireNoSubscribe => index, 1,2,3,4,5
+
+// export const useRequireNoAuth = () => {
+//   const router = useRouter();
+//   const auth = useAuth();
+
+//   useEffect(() => {
+//     if (auth.user) {
+//       router.push('/browse');
+//     }
+//   }, [auth, router]);
+
+//   return auth;
+// };

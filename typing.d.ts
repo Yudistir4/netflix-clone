@@ -4,6 +4,15 @@ export interface Genre {
   id: number;
   name: string;
 }
+type PlanType = 'mobile' | 'basic' | 'standard' | 'premium';
+
+export interface UserDetail {
+  id?: string;
+  userID: string;
+  hasPaid: boolean;
+  signupSlideNumber: number;
+  planType: PlanType;
+}
 
 export interface Movie {
   title: string;

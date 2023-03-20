@@ -9,17 +9,18 @@ import Section4 from '../components/home/Section4';
 import Section5 from '../components/home/Section5';
 import Section6 from '../components/home/Section6';
 import Tv from '../components/home/Section2';
-import { useRequireNoAuth } from '../hooks/useAuth';
+import useAuth, { useRequireWithOrWithoutAuth } from '../hooks/useAuth';
 
 const Index = () => {
-  useRequireNoAuth();
+  useRequireWithOrWithoutAuth();
+  const { user, userDetail, logout } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
 
   const signup = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     localStorage.setItem('email', email);
-    router.push('/signup');
+    router.push('/signup/1');
   };
   return (
     <div>
@@ -35,14 +36,23 @@ const Index = () => {
           src="/assets/netflix-logo.svg"
           alt="netflix-logo"
         />
-        <Link href={'/login'}>
-          <a
+        {user ? (
+          <button
+            onClick={logout}
             className="!bg-[#e50914] block rounded py-2 px-6 font-semibold"
-            rel="noopener noreferrer"
           >
-            Sign In
-          </a>
-        </Link>
+            Logout
+          </button>
+        ) : (
+          <Link href={'/login'}>
+            <a
+              className="!bg-[#e50914] block rounded py-2 px-6 font-semibold"
+              rel="noopener noreferrer"
+            >
+              Sign In
+            </a>
+          </Link>
+        )}
       </div>
       <main className="bg-black pb-20">
         <div className="h-screen w-full relative">
@@ -60,24 +70,35 @@ const Index = () => {
             <h2 className="text-xl sm:text-2xl">
               Watch anywhere. Cancel anytime.
             </h2>
-            <p className="text-xl text-center">
-              Ready to watch? Enter your email to create or restart your
-              membership.
-            </p>
-            <form
-              onSubmit={signup}
-              className="flex flex-col gap-3 w-full items-center lg:flex-row lg:gap-0 max-w-[800px]"
-            >
-              <input
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder="Email Address"
-                className="w-full bg-white px-4 py-3 rounded outline-none placeholder-[gray] text-black lg:flex-1 lg:rounded-r-none"
-              />
-              <button className="bg-[#e50914] rounded py-3 lg:h-full px-6 font-bold lg:rounded-l-none flex items-center ">
-                Get Started <ChevronRightIcon className="h-5" />
-              </button>
-            </form>
+
+            {user ? (
+              <Link href={'/signup/' + userDetail?.signupSlideNumber}>
+                <a className="bg-[#e50914] rounded py-3 lg:h-full px-6 font-bold lg:rounded-l-none flex items-center">
+                  Finish Sign Up
+                </a>
+              </Link>
+            ) : (
+              <>
+                <p className="text-xl text-center">
+                  Ready to watch? Enter your email to create or restart your
+                  membership.
+                </p>
+                <form
+                  onSubmit={signup}
+                  className="flex flex-col gap-3 w-full items-center lg:flex-row lg:gap-0 max-w-[800px]"
+                >
+                  <input
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    placeholder="Email Address"
+                    className="w-full bg-white px-4 py-3 rounded outline-none placeholder-[gray] text-black lg:flex-1 lg:rounded-r-none"
+                  />
+                  <button className="bg-[#e50914] rounded py-3 lg:h-full px-6 font-bold lg:rounded-l-none flex items-center ">
+                    Get Started <ChevronRightIcon className="h-5" />
+                  </button>
+                </form>
+              </>
+            )}
           </div>
         </div>
         <div className="">
@@ -99,3 +120,11 @@ const Index = () => {
 };
 
 export default Index;
+// export async function getServerSideProps(
+
+// ) {
+//    const {user}=useAuth()
+//   // return {
+//   //   props: {},
+//   // };
+// }
