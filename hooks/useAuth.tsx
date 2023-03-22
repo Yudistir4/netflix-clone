@@ -62,6 +62,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
+    setError(null);
+  }, [router]);
+
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       console.log('calling');
       if (user) {
