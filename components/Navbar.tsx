@@ -14,6 +14,7 @@ import { useRecoilState } from 'recoil';
 import { searchMoviesState, searchState } from '../atoms/atom';
 import { useRouter } from 'next/router';
 
+import { GoTriangleUp } from 'react-icons/go';
 const routes = [
   { name: 'Home', href: '/browse' },
   { name: 'Tv Shows', href: '/tvshows' },
@@ -28,8 +29,9 @@ const Navbar = () => {
   const [search, setSearch] = useRecoilState(searchState);
   const [searchResult, setSearchResult] = useRecoilState(searchMoviesState);
   const [showInputSearch, setShowInputSearch] = useState(false);
+  const [toggle, setToggle] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-
+  const menuRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const handleScroll = () => {
       window.scrollY > 0 ? setIsScrolled(true) : setIsScrolled(false);
@@ -44,6 +46,7 @@ const Navbar = () => {
     if (search) return;
     setShowInputSearch(false);
   });
+  useClickOutside(menuRef, () => setToggle(false));
 
   const handleSearch = async () => {
     if (!search) {
@@ -66,7 +69,7 @@ const Navbar = () => {
       clearTimeout(timeout);
     };
   }, [search]);
-
+  console.log('asik');
   return (
     <div
       className={`${
@@ -75,11 +78,15 @@ const Navbar = () => {
           : 'shadow-xl shadow-black/5 bg-black/10  backdrop-blur-[1px]'
       }  transition duration-300 flex items-center justify-between px-5 py-3 sticky top-0 z-50 sm:text-xl sm:px-10 `}
     >
-      <div className="flex items-center">
+      <div
+        className={`${
+          showInputSearch ? 'opacity-0 scale-0 hidden' : 'opacity-100 scale-100'
+        } flex items-center transition-all`}
+      >
         <Link href="/browse">
           <a>
             <Image
-              className="cursor-pointer object-contain"
+              className={`  cursor-pointer object-contain `}
               alt=""
               src="/assets/netflix-logo.svg"
               width={100}
@@ -87,29 +94,49 @@ const Navbar = () => {
             />
           </a>
         </Link>
-        <ul className=" items-center gap-3 ml-8 text-[#e5e5e5] hidden md:flex">
-          {routes.map((data) => (
-            <li
-              key={data.href}
-              onClick={() => {
-                setSearch('');
-                setShowInputSearch(false);
-              }}
-              className="hover:text-[#b3b3b3] transition cursor-pointer"
-            >
-              <Link href={data.href}>
-                <a>{data.name}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div
+          ref={menuRef}
+          onClick={() => setToggle((prev) => !prev)}
+          className={` ml-8 relative  max-w-sm flex justify-center lg:items-center`}
+        >
+          <h3 className="text-center cursor-pointer flex items-center gap-1 lg:hidden">
+            Browse <GoTriangleUp className="rotate-180" />
+          </h3>
+          <GoTriangleUp
+            className={`${
+              toggle ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+            } absolute top-8  transition-all`}
+          />
+          <ul
+            className={`${
+              toggle ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
+            } border-t-2 border-white md:border-none  rounded-b-md  items-center text-center    lg:opacity-100 scale-100  transition-all  lg:bg-transparent   bg-black/90 mt-12 lg:mt-0 w-[320px] max-w-lg  overflow-hidden   text-[#e5e5e5] flex flex-col absolute lg:static lg:flex-row lg:gap-4`}
+          >
+            {routes.map((data) => (
+              <li
+                key={data.href}
+                onClick={() => {
+                  setSearch('');
+                  setShowInputSearch(false);
+                }}
+                className="hover:text-[#b3b3b3] transition w-full lg:w-auto"
+              >
+                <Link href={data.href}>
+                  <a className="w-full cursor-pointer p-3 block hover:bg-white/10  lg:hover:bg-transparent lg:p-0">
+                    {data.name}
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="flex items-center gap-5">
         {/* INPUT SEARCH */}
         <div
           className={`${
-            showInputSearch && 'w-[300px]'
+            showInputSearch && 'sm:w-[300px] w-full'
           } relative flex items-center w-10 h-12  transition-all`}
           ref={ref}
         >
@@ -140,10 +167,10 @@ const Navbar = () => {
             />
           )}
         </div>
-        <BellIcon className="h-7 w-7 " />
+        <BellIcon className="h-7 w-7 shrink-0" />
         <Menu>
-          <MenuButton>
-            <img src="/assets/person.png" className="rounded" alt="" />
+          <MenuButton className="shrink-0">
+            <img src="/assets/person.png" className="rounded  " alt="" />
           </MenuButton>
           <MenuList className="!bg-black !border-none">
             <MenuItem
