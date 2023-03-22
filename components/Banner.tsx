@@ -81,7 +81,7 @@ const Banner = ({ netflixOriginals }: Props) => {
         <h1 className="text-2xl md:text-4xl lg:text-6xl font-semibold">
           {currMovie?.title || currMovie?.name || movie?.original_name}
         </h1>
-        <p className="md:text-xl text-xs max-w-[80%] md:max-w-xl">
+        <p className="md:text-xl text-xs max-w-[80%] md:max-w-xl hidden xs:block">
           {cropText(currMovie?.overview)}
         </p>
 

@@ -57,9 +57,14 @@ const Login = () => {
         />
         <form
           onSubmit={onSubmit}
-          className="w-full bg-transparent sm:w-[450px] flex flex-col gap-8 p-5 sm:p-14 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] sm:bg-black/70 "
+          className="w-full  bg-transparent sm:w-[450px] flex flex-col gap-8 p-5 sm:p-14 absolute left-[50%] top-[50%] -translate-x-[50%] -translate-y-[50%] sm:bg-black/70 "
         >
           <h2 className="text-4xl font-bold">Sign In</h2>
+          {error && (
+            <p className="text-sm text-center bg-red-500/20 rounded p-3 text-red-500">
+              {error}
+            </p>
+          )}
           <div className="flex flex-col gap-4">
             <div className="">
               <input
@@ -86,11 +91,7 @@ const Login = () => {
               )}
             </div>
           </div>
-          {error && (
-            <p className="text-sm text-center bg-red-500/20 rounded p-3 text-red-500">
-              {error}
-            </p>
-          )}
+
           <button className="btn-login flex items-center justify-center">
             {loading ? (
               <AiOutlineLoading3Quarters className="animate-spin text-2xl" />

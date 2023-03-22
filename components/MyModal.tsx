@@ -110,7 +110,7 @@ const MyModal = () => {
         setIsSaved(false);
       }
     };
-  getData();
+    getData();
   }, [movie, user]);
 
   useEffect(() => {
@@ -146,7 +146,7 @@ const MyModal = () => {
         size="5xl"
         scrollBehavior="outside"
       >
-      <ModalOverlay />
+        <ModalOverlay />
         <ModalContent className="m-5 sm:m-10">
           <ModalBody
             overflowY="auto"
@@ -176,12 +176,12 @@ const MyModal = () => {
                 {' '}
                 <XMarkIcon className="h-5 w-5 sm:h-8 sm:w-8" />
               </button>
-              <div className="z-10 absolute left-0 bottom-20 p-10 text-5xl">
+              <div className="z-10 absolute left-0 bottom-20 sm:p-10 sm:text-5xl text-xl pl-5">
                 {movie?.title || movie?.name || movie?.original_name}
               </div>
 
-              <div className="z-20 absolute flex   bottom-0 left-0 p-5 sm:p-10 justify-between w-full">
-                <div className="flex gap-2">
+              <div className="z-20 absolute flex   bottom-0 left-0 p-5 sm:p-10 justify-between items-center w-full">
+                <div className="flex gap-2 items-center">
                   <div
                     onClick={() => {
                       setModal(false);
@@ -230,9 +230,9 @@ const MyModal = () => {
                   HD
                 </p>
               </div>
-              <div className="flex justify-between gap-5">
-                <p className="w-[60%]">{movie?.overview}</p>
-                <div className="flex flex-col gap-3 w-[40%]">
+              <div className="flex flex-col xs:flex-row justify-between gap-5 text-justify">
+                <p className="xs:w-[60%]">{movie?.overview}</p>
+                <div className="flex flex-col gap-3 xs:w-[40%]">
                   <p>
                     <span className="text-[gray]">Genres: </span>
                     {genres.map((genre) => genre.name).join(', ')}

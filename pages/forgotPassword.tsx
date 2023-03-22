@@ -28,14 +28,14 @@ const ForgotPassword = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between p-5 sm:p-10 items-center">
-        <Image src="/assets/netflix-logo.svg" alt="" width={170} height={50} />
+        <Image src="/assets/netflix-logo.svg" alt="" width={130} height={50} />
         <Link href="/login">
           <a className="text-red-600 text-xl font-bold">Sign In </a>
         </Link>
       </div>
       <form
         onSubmit={onSubmit}
-        className="m-auto flex flex-col gap-3 max-w-md p-5 bg-white text-black mt-20"
+        className="mx-5 xs:mx-auto flex flex-col gap-3 max-w-md p-5 bg-white text-black mt-20"
       >
         <h1 className="text-3xl font-bold">Forgot Password</h1>
         <p className="">
