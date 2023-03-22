@@ -76,12 +76,12 @@ const Navbar = () => {
         isScrolled
           ? 'bg-[#141414]'
           : 'shadow-xl shadow-black/5 bg-black/10  backdrop-blur-[1px]'
-      }  transition duration-300 flex items-center justify-between px-5 py-3 sticky top-0 z-50 sm:text-xl sm:px-10 `}
+      }  transition duration-300 flex items-center justify-between px-5 py-3 sticky top-0 z-50 sm:text-xl sm:px-10 gap-3`}
     >
       <div
         className={`${
           showInputSearch ? 'opacity-0 scale-0 hidden' : 'opacity-100 scale-100'
-        } flex items-center transition-all`}
+        } flex items-center transition-all xs:flex xs:opacity-100 xs:scale-100 shrink-0`}
       >
         <Link href="/browse">
           <a>
@@ -105,12 +105,12 @@ const Navbar = () => {
           <GoTriangleUp
             className={`${
               toggle ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-            } absolute top-8  transition-all`}
+            } absolute top-8 lg:opacity-0 lg:scale-0  transition-all`}
           />
           <ul
             className={`${
               toggle ? 'opacity-100 scale-100' : 'opacity-0 scale-0'
-            } border-t-2 border-white md:border-none  rounded-b-md  items-center text-center    lg:opacity-100 scale-100  transition-all  lg:bg-transparent   bg-black/90 mt-12 lg:mt-0 w-[320px] max-w-lg  overflow-hidden   text-[#e5e5e5] flex flex-col absolute lg:static lg:flex-row lg:gap-4`}
+            } border-t-2 border-white lg:border-none  rounded-b-md  items-center text-center    lg:opacity-100 lg:scale-100  transition-all  lg:bg-transparent   bg-black/90 mt-12 lg:mt-0 w-[320px] max-w-lg  overflow-hidden   text-[#e5e5e5] flex flex-col absolute lg:static lg:flex-row lg:gap-4`}
           >
             {routes.map((data) => (
               <li
@@ -132,15 +132,14 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="flex items-center gap-5">
+      <div className="flex items-center gap-5 flex-1   justify-end">
         {/* INPUT SEARCH */}
         <div
           className={`${
-            showInputSearch && 'sm:w-[300px] w-full'
+            showInputSearch && 'sm:w-[300px] w-full xs:w-1/2'
           } relative flex items-center w-10 h-12  transition-all`}
           ref={ref}
         >
-          {/* {showInputSearch && ( */}
           <input
             type="text"
             value={search}
@@ -150,7 +149,6 @@ const Navbar = () => {
               showInputSearch ? 'block opacity-100 px-10' : 'absolute opacity-0'
             } w-full bg-transparent border-2 h-full outline-none   bg-[#141414] `}
           />
-          {/* )} */}
 
           <FaSearch
             onClick={() => setShowInputSearch(true)}
