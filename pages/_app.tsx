@@ -5,8 +5,7 @@ import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RecoilRoot } from 'recoil';
 import { AuthProvider } from '../hooks/useAuth';
-import MyModal from '../components/MyModal';
-import Navbar from '../components/Navbar';
+
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
 };

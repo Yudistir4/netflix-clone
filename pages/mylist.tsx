@@ -19,6 +19,7 @@ const Mylist: NextPageWithLayout = () => {
 
   useEffect(() => {
     const getData = async () => {
+      if (!user) return;
       const movieRef = collection(db, 'movies');
       const q = query(movieRef, where('userID', '==', user?.uid));
       const querySnapshot = await getDocs(q);
