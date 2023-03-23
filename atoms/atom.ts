@@ -12,7 +12,7 @@ export const searchState = atom({
 });
 export const volumeState = atom({
   key: 'volumeState',
-  default: 0.5,
+  default: 0.3,
 });
 export const muteState = atom({
   key: 'muteState',
