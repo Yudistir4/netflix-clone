@@ -9,7 +9,7 @@ import {
 } from '../atoms/atom';
 import Layout from '../components/Layout';
 import { useRequireAuth } from '../hooks/useAuth';
-import { Movie } from '../typing';
+
 import { NextPageWithLayout } from './_app';
 
 const Search: NextPageWithLayout = () => {
@@ -21,10 +21,7 @@ const Search: NextPageWithLayout = () => {
   return (
     <div className=" p-3 sm:p-10">
       <h2 className="text-3xl sm:text-4xl mb-3 sm:mb-10">Result</h2>
-      <div
-        //   ref={rowRef}
-        className="grid  grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6   py-3 "
-      >
+      <div className="grid  grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6   py-3 ">
         {searchMovies &&
           searchMovies.map((movie, i) => (
             <div

@@ -28,7 +28,6 @@ const Login = () => {
     resolver: yupResolver(loginSchema),
   });
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     await signIn(data.email, data.password);
   });
 

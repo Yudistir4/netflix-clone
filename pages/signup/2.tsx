@@ -1,6 +1,6 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement } from 'react';
 import LayoutSignup from '../../components/LayoutSignup';
-import useAuth, { useRequireWithAuthAndNoSubscribe } from '../../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 import { signup } from '../../constants/staticText';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
@@ -9,9 +9,6 @@ import * as yup from 'yup';
 import { Checkbox } from '@chakra-ui/react';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useRouter } from 'next/router';
-import { updateProfile } from 'firebase/auth';
-import { auth } from '../../firebase';
-import Link from 'next/link';
 
 type FormData = {
   email: string;
@@ -34,11 +31,8 @@ const fields: Field[] = [
 ];
 
 const Signup = () => {
-  // useRequireWithAuthAndNoSubscribe();
-  // useRequireAuth();
   const { signUp, loading, error, user, userDetail, updateUserDetail } =
     useAuth();
-  console.log(user);
 
   const router = useRouter();
   const {
@@ -59,7 +53,7 @@ const Signup = () => {
 
   const submit = async () => {
     if (!user) return;
-    console.log(userDetail);
+
     await updateUserDetail({
       id: userDetail!.id,
       userID: userDetail!.userID,

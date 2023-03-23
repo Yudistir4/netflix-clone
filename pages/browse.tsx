@@ -47,9 +47,7 @@ const Home: NextPageWithLayout<Props> = ({
     { title: 'Documentaries', movies: documentaries },
   ];
 
-  // if (!user) {
-
-  // }
+ 
 
   return (
     <div className=" relative">

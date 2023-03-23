@@ -67,7 +67,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log('calling');
       if (user) {
         setUser(user);
         getUserDetail(user.uid);
@@ -152,11 +151,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(doc);
       setUserDetail({ id: doc.id, ...doc.data() });
     });
-
-    // console.log(querySnapshot.empty);
-    // if (querySnapshot.empty) {
-    //   setIsSaved(false);
-    // }
   };
   const updateUserDetail = async (newUserDetail: UserDetail) => {
     const { id, hasPaid, planType, signupSlideNumber } = newUserDetail;
@@ -220,7 +214,6 @@ export const useRequireAuth = () => {
     if (!user) {
       router.push('/login');
     } else if (user && userDetail) {
-      console.log('---hei yo---');
       if (!userDetail.hasPaid) {
         router.push('/signup/' + userDetail.signupSlideNumber);
       }

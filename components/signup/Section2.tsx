@@ -50,7 +50,6 @@ const Section2 = ({ setSection, setData }: Props) => {
     resolver: yupResolver(signupSchema),
   });
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     setData(data);
     const errStatus = await signUp(data.email, data.password);
 

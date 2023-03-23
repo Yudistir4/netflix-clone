@@ -69,7 +69,7 @@ const Navbar = () => {
       clearTimeout(timeout);
     };
   }, [search]);
-  console.log('asik');
+
   return (
     <div
       className={`${

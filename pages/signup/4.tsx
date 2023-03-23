@@ -3,7 +3,6 @@ import LayoutSignup from '../../components/LayoutSignup';
 import useAuth, { useRequireWithAuthAndNoSubscribe } from '../../hooks/useAuth';
 import { signup } from '../../constants/staticText';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { BsCheck2 } from 'react-icons/bs';
 import { PlanType } from '../../typing';
 import { useRouter } from 'next/router';
@@ -15,14 +14,11 @@ const Signup = () => {
   const router = useRouter();
   const [selected, setSelected] = useState(0);
   useEffect(() => {
-    console.log('selected');
     userDetail?.planType && setSelected(planType.indexOf(userDetail?.planType));
   }, [userDetail]);
   const submit = async () => {
-    console.log(userDetail);
     if (!user || !userDetail) return;
-    console.log(userDetail);
-    // if {selected === 0}
+
     await updateUserDetail({
       id: userDetail!.id,
       userID: userDetail!.userID,
@@ -32,9 +28,7 @@ const Signup = () => {
     });
     router.push('/signup/5');
   };
-  // useEffect(() => {
-  //   submit();
-  // }, [user, userDetail, updateUserDetail, selected]);
+
   return (
     <motion.div
       initial={{ x: 30, opacity: 0 }}

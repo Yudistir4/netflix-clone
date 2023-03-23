@@ -1,19 +1,4 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react';
-import {
-  HandThumbUpIcon,
-  PlusIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/solid';
+import { HandThumbUpIcon, PlusIcon } from '@heroicons/react/24/solid';
 import {
   addDoc,
   collection,
@@ -23,7 +8,7 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import Link from 'next/link';
+
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { BsArrowLeft, BsCheck2 } from 'react-icons/bs';
@@ -31,7 +16,6 @@ import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
 import {
-  modalState,
   movieState,
   muteState,
   myMoviesState,
@@ -96,7 +80,7 @@ const Watch = () => {
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(parseFloat(e.target.value));
     setMuted(false);
-    console.log(e.target.value);
+
     if (e.target.value === '0') {
       setMuted(true);
     }

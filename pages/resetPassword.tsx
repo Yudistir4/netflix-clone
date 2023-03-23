@@ -73,7 +73,6 @@ const ConfirmPassword = () => {
     let intervalId: number;
     intervalId = window.setInterval(() => {
       if (countdown > 0) {
-        console.log(countdown);
         setCountdown((prev) => prev - 1);
       } else {
         clearInterval(intervalId);

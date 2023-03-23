@@ -1,9 +1,8 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { ReactElement } from 'react';
 import LayoutSignup from '../../components/LayoutSignup';
 import useAuth, { useRequireWithAuthAndNoSubscribe } from '../../hooks/useAuth';
 import { signup } from '../../constants/staticText';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import Image from 'next/image';
 import { BsCheck2 } from 'react-icons/bs';
 import { useRouter } from 'next/router';
@@ -14,7 +13,7 @@ const Signup = () => {
 
   const submit = async () => {
     if (!user) return;
-    console.log(userDetail);
+
     await updateUserDetail({
       id: userDetail!.id,
       userID: userDetail!.userID,

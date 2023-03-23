@@ -24,7 +24,6 @@ const Signup = () => {
   const [showCountdown, setShowCountdown] = useState(false);
   const submit = async () => {
     if (!user) return;
-    console.log(userDetail);
 
     await updateUserDetail({
       id: userDetail!.id,
@@ -40,7 +39,6 @@ const Signup = () => {
     let intervalId: number;
     intervalId = window.setInterval(async () => {
       if (countdown > 0) {
-        console.log(countdown);
         setCountdown((prev) => prev - 1);
       } else {
         clearInterval(intervalId);
@@ -59,7 +57,7 @@ const Signup = () => {
         transition={{ duration: 0.3 }}
         className="m-5 max-w-md w-full flex flex-col items-center text-center gap-5"
       >
-        <Image height={50} width={50} src="/assets/lock.png" />
+        <Image height={50} width={50} src="/assets/lock.png" alt="lock" />
         <div className="mt-5">
           <p className="text-xs pb-2">
             STEP <span className="font-bold">3</span> OF{' '}
@@ -85,7 +83,7 @@ const Signup = () => {
               <div className="flex gap-2 items-center">
                 <span className="mr-2">{val.text}</span>
                 {val.images.map((img) => (
-                  <Image key={img} height={40} width={40} src={img} />
+                  <Image key={img} height={40} width={40} src={img} alt={img} />
                 ))}
               </div>
               <ChevronRightIcon className="h-7 text-[gray]" />

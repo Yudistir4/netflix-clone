@@ -1,11 +1,10 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import LayoutSignup from '../../components/LayoutSignup';
 import { signup } from '../../constants/staticText';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRequireWithAuthAndNoSubscribe } from '../../hooks/useAuth';
+
 const Signup = () => {
-  // useRequireWithAuthAndNoSubscribe();
   return (
     <motion.div
       initial={{ x: 30, opacity: 0 }}

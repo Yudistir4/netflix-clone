@@ -47,7 +47,6 @@ const MyModal = () => {
 
     deleteDoc(docRef)
       .then(() => {
-        console.log('Document successfully deleted!');
         setIsSaved(false);
         setMovieIdFirebase('');
       })
@@ -72,7 +71,6 @@ const MyModal = () => {
       setMovieIdFirebase(docRef.id);
       setIsSaved(true);
       setMyMovies((prev) => [...prev, newMovie]);
-      console.log('Document written with ID: ', docRef.id);
     } catch (e) {
       console.error('Error adding document: ', e);
     }
@@ -89,12 +87,10 @@ const MyModal = () => {
       );
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc: any) => {
-        console.log(doc.id, ' => ', doc.data());
         setIsSaved(true);
         setMovieIdFirebase(doc.id);
       });
 
-      console.log(querySnapshot.empty);
       if (querySnapshot.empty) {
         setIsSaved(false);
       }
