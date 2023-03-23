@@ -1,20 +1,9 @@
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Modal, ModalOverlay, ModalContent, ModalBody } from '@chakra-ui/react';
 import {
   HandThumbUpIcon,
   PlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
@@ -123,11 +112,14 @@ const MyModal = () => {
           process.env.NEXT_PUBLIC_API_KEY
         }&language=en-US&append_to_response=videos`
       ).then((response) => response.json());
+
       if (data?.videos) {
         const index = data.videos.results.findIndex(
           (element: Element) => element.type === 'Trailer'
         );
         setTrailer(data.videos?.results[index]?.key);
+      } else {
+        setTrailer('');
       }
       if (data?.genres) {
         setGenres(data.genres);
@@ -152,42 +144,48 @@ const MyModal = () => {
             overflowY="auto"
             className="bg-[#181818] text-xl   text-white !p-0 !rounded overflow-hidden"
           >
+            {!trailer && (
+              <div className=" w-full text-center aspect-[2.5/1] absolute justify-center  flex items-center   ">
+                Video Not Available...!!
+              </div>
+            )}
             <div className="relative pt-[56.25%]  ">
               <div className=" w-full bg-gradient-to-t from-[#181818] to-transparent h-[40%]  absolute left-0 bottom-0 z-10"></div>
-
-              <ReactPlayer
-                url={`https://www.youtube.com/watch?v=${trailer}`}
-                width="100%"
-                height="100%"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                }}
-                playing
-                loop
-                muted={muted}
-              />
+              {trailer && (
+                <ReactPlayer
+                  url={`https://www.youtube.com/watch?v=${trailer}`}
+                  width="100%"
+                  height="100%"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                  }}
+                  playing
+                  loop
+                  muted={muted}
+                />
+              )}
 
               <button
                 onClick={() => setModal(false)}
                 className="rounded-full z-20 bg-[#181818] absolute top-3 right-3 h-10 w-10 sm:h-14 sm:w-14 flex items-center justify-center "
               >
-                {' '}
                 <XMarkIcon className="h-5 w-5 sm:h-8 sm:w-8" />
               </button>
-              <div className="z-10 absolute left-0 bottom-20 sm:p-10 sm:text-5xl text-xl pl-5">
+              <div className="z-10 absolute left-0 bottom-11 xs:bottom-14 sm:bottom-[60px] sm:p-10 md:text-5xl text-xl pl-5">
                 {movie?.title || movie?.name || movie?.original_name}
               </div>
 
-              <div className="z-20 absolute flex   bottom-0 left-0 p-5 sm:p-10 justify-between items-center w-full">
+              {/* Control */}
+              <div className="z-20 absolute flex    bottom-0 left-0 px-5 sm:p-10 justify-between items-center w-full">
                 <div className="flex gap-2 items-center">
                   <div
                     onClick={() => {
                       setModal(false);
                       router.push(`/watch/${movie?.id}`);
                     }}
-                    className="cursor-pointer text-2xl bg-white text-black flex items-center justify-center rounded-md px-10 py-2 gap-2 font-bold   "
+                    className="cursor-pointer text-base xs:text-2xl bg-white text-black flex items-center justify-center rounded-md px-10 py-2 gap-2 font-bold   "
                   >
                     <FaPlay />
                     <span> Play</span>

@@ -14,10 +14,19 @@ import {
   PlusIcon,
   XMarkIcon,
 } from '@heroicons/react/24/solid';
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { BsArrowLeft } from 'react-icons/bs';
+import { BsArrowLeft, BsCheck2 } from 'react-icons/bs';
 import { FaPause, FaPlay, FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
 import ReactPlayer from 'react-player';
 import { useRecoilState } from 'recoil';
@@ -25,13 +34,16 @@ import {
   modalState,
   movieState,
   muteState,
+  myMoviesState,
   volumeState,
 } from '../../atoms/atom';
-import { useRequireAuth } from '../../hooks/useAuth';
-import { Element, Genre } from '../../typing';
+import { db } from '../../firebase';
+import useAuth, { useRequireAuth } from '../../hooks/useAuth';
+import { Element, Genre, myMovieFirebase } from '../../typing';
 
 const Watch = () => {
   useRequireAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { id } = router.query;
   const [muted, setMuted] = useRecoilState(muteState);
@@ -41,7 +53,46 @@ const Watch = () => {
   const [playing, setPlaying] = useState(true);
   const [volume, setVolume] = useRecoilState(volumeState);
   const [showInputRange, setShowInputRange] = useState(false);
+  const [movieIdFirebase, setMovieIdFirebase] = useState('');
+  const [isSaved, setIsSaved] = useState(false);
+  const [myMovies, setMyMovies] = useRecoilState(myMoviesState);
 
+  const deleteMovie = async () => {
+    if (!movieIdFirebase) return;
+    const docRef = doc(db, 'movies', movieIdFirebase);
+
+    deleteDoc(docRef)
+      .then(() => {
+        console.log('Document successfully deleted!');
+        setIsSaved(false);
+        setMovieIdFirebase('');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+
+    setMyMovies(
+      myMovies?.filter((data: myMovieFirebase) => data.movie?.id !== movie?.id)
+    );
+  };
+
+  const addMovie = async () => {
+    // Add a second document with a generated ID.
+
+    try {
+      const newMovie: myMovieFirebase = {
+        userID: user!.uid,
+        movie,
+      };
+      const docRef = await addDoc(collection(db, 'movies'), newMovie);
+      setMovieIdFirebase(docRef.id);
+      setIsSaved(true);
+      setMyMovies((prev) => [...prev, newMovie]);
+      console.log('Document written with ID: ', docRef.id);
+    } catch (e) {
+      console.error('Error adding document: ', e);
+    }
+  };
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setVolume(parseFloat(e.target.value));
     setMuted(false);
@@ -50,6 +101,29 @@ const Watch = () => {
       setMuted(true);
     }
   };
+  useEffect(() => {
+    if (!movie) return;
+    const getData = async () => {
+      const movieRef = collection(db, 'movies');
+      const q = query(
+        movieRef,
+        where('movie.id', '==', movie!.id),
+        where('userID', '==', user?.uid || '')
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc: any) => {
+        console.log(doc.id, ' => ', doc.data());
+        setIsSaved(true);
+        setMovieIdFirebase(doc.id);
+      });
+
+      console.log(querySnapshot.empty);
+      if (querySnapshot.empty) {
+        setIsSaved(false);
+      }
+    };
+    getData();
+  }, [movie, user]);
 
   useEffect(() => {
     // if (!movie) return;
@@ -66,6 +140,8 @@ const Watch = () => {
           (element: Element) => element.type === 'Trailer'
         );
         setTrailer(data.videos?.results[index]?.key);
+      } else {
+        setTrailer('');
       }
       if (data?.genres) {
         setGenres(data.genres);
@@ -79,26 +155,32 @@ const Watch = () => {
     <div className="group bg-[#181818] h-screen  text-white !p-0 !rounded overflow-hidden">
       {/* <div className="h-screen "> */}
       <div className="relative  h-screen">
-        <ReactPlayer
-          url={`https://www.youtube.com/watch?v=${trailer}`}
-          width="100%"
-          height="100%"
-          style={{ position: 'absolute', top: 0, left: 0 }}
-          playing={playing}
-          controls={false}
-          volume={volume}
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
-          muted={muted}
-          config={{
-            youtube: {
-              playerVars: {
-                controls: 0,
-                modestbranding: 1,
+        {!trailer ? (
+          <div className=" w-full text-center h-full absolute justify-center  flex items-center  ">
+            Video Not Available...!!
+          </div>
+        ) : (
+          <ReactPlayer
+            url={`https://www.youtube.com/watch?v=${trailer}`}
+            width="100%"
+            height="100%"
+            style={{ position: 'absolute', top: 0, left: 0 }}
+            playing={playing}
+            controls={false}
+            volume={volume}
+            onPlay={() => setPlaying(true)}
+            onPause={() => setPlaying(false)}
+            muted={muted}
+            config={{
+              youtube: {
+                playerVars: {
+                  controls: 0,
+                  modestbranding: 1,
+                },
               },
-            },
-          }}
-        />
+            }}
+          />
+        )}
 
         <button
           onClick={() => router.back()}
@@ -120,9 +202,16 @@ const Watch = () => {
               <FaPlay className="h-8 w-8" />
             )}
           </button>
-          <button className="group-hover:opacity-100 opacity-0 transition-all group-hover:scale-100 scale-0 rounded-full border-2 border-[gray] bg-black/50 h-16 w-16 flex items-center justify-center hover:bg-white/20 hover:border-white">
-            {' '}
-            <PlusIcon className="h-8 w-8" />{' '}
+          <button
+            onClick={isSaved ? deleteMovie : addMovie}
+            className="group-hover:opacity-100 opacity-0 transition-all group-hover:scale-100 scale-0 rounded-full border-2 border-[gray] bg-black/50 h-16 w-16 flex items-center justify-center hover:bg-white/20 hover:border-white"
+          >
+            {isSaved ? (
+              <BsCheck2 className="h-8 w-8" />
+            ) : (
+              <PlusIcon className="h-8 w-8" />
+            )}
+            {/* <PlusIcon className="h-8 w-8" />{' '} */}
           </button>
           <button className="group-hover:opacity-100 opacity-0 transition-all group-hover:scale-100 scale-0 rounded-full border-2 border-[gray] bg-black/50 h-16 w-16 flex items-center justify-center hover:bg-white/20 hover:border-white">
             {' '}
